@@ -1,0 +1,937 @@
+
+# Final MSC Data Science & App Dissertation Jupyter / Python Notebook:
+
+# In[6]:
+
+
+# Setting working directory to data store:
+import os
+os.chdir("/Users/tomspeed/Library/CloudStorage/OneDrive-UniversityofEssex/Dissertation/data")
+os.getcwd()
+
+
+# In[2]:
+
+
+# Installing essential libraries:
+import pandas as pd
+import numpy as np
+
+
+# Data Preprosessing / Cleaning:
+
+# In[13]:
+
+
+# Importing 2015 price data:
+price_2015 = pd.read_excel('price_2015.xlsx')
+price_2015 = price_2015[price_2015['name'] == 'Hourly average price final sum of components']
+
+
+#Creating a new dataset to which further years will be added to
+price_data = price_2015.copy(deep=True)
+
+
+# In[14]:
+
+
+# Importing 2016 price data
+price_2016 = pd.read_excel('price_2016.xlsx')
+price_2016 = price_2016[price_2016['name'] == 'Hourly average price final sum of components']
+
+price_data = pd.concat([price_data, price_2016], axis=0)
+
+
+# In[15]:
+
+
+# Importing 2017 Data:
+price_2017 = pd.read_excel('price_2017.xlsx')
+price_2017 = price_2017[price_2017['name'] == 'Hourly average price final sum of components']
+
+price_data = pd.concat([price_data, price_2017], axis=0)
+
+
+# In[16]:
+
+
+# Importing 2018 Data:
+price_2018 = pd.read_excel('price_2018.xlsx')
+price_2018 = price_2018[price_2018['name'] == 'Hourly average price final sum of components']
+
+price_data = pd.concat([price_data, price_2018], axis=0)
+
+
+# In[17]:
+
+
+# Importing 2019 Data:
+price_2019 = pd.read_excel('price_2019.xlsx')
+price_2019 = price_2019[price_2019['name'] == 'Hourly average price final sum of components']
+
+price_data = pd.concat([price_data, price_2019], axis=0)
+
+
+# In[18]:
+
+
+# Importing 2020 Data:
+price_2020 = pd.read_excel('price_2020.xlsx')
+price_2020 = price_2020[price_2020['name'] == 'Hourly average price final sum of components']
+
+price_data = pd.concat([price_data, price_2020], axis=0)
+
+
+# In[19]:
+
+
+# Importing 2021 Data:
+price_2021 = pd.read_excel('price_2021.xlsx')
+price_2021 = price_2021[price_2021['name'] == 'Hourly average price final sum of components']
+
+price_data = pd.concat([price_data, price_2021], axis=0)
+
+
+# In[20]:
+
+
+# Importing 2022 Data:
+price_2022 = pd.read_excel('price_2022.xlsx')
+price_2022 = price_2022[price_2022['name'] == 'Hourly average price final sum of components']
+
+price_data = pd.concat([price_data, price_2022], axis=0)
+
+
+# In[21]:
+
+
+# Importing 2023 Data:
+price_2023 = pd.read_excel('price_2023.xlsx')
+price_2023 = price_2023[price_2023['name'] == 'Hourly average price final sum of components']
+
+price_data = pd.concat([price_data, price_2023], axis=0)
+
+
+# In[22]:
+
+
+# Saving price_data as a dataframe:
+price_df = pd.DataFrame(price_data)
+
+
+# Production-Side Variables:
+
+# In[23]:
+
+
+# Importing 2015 production data:
+production_var_2015 = pd.read_csv('production_var_2015.csv')
+
+
+#Creating a new dataset to merge further years to
+production_data = production_var_2015.copy(deep=True)
+
+
+# In[24]:
+
+
+# Importing 2016 production data
+production_var_2016 = pd.read_csv('production_var_2016.csv')
+production_data = pd.concat([production_data, production_var_2016], axis=0)
+
+
+# In[25]:
+
+
+# Importing 2017 production data
+production_var_2017 = pd.read_csv('production_var_2017.csv')
+production_data = pd.concat([production_data, production_var_2017], axis=0)
+
+
+# In[26]:
+
+
+# Importing 2018 production data
+production_var_2018 = pd.read_csv('production_var_2018.csv')
+production_data = pd.concat([production_data, production_var_2018], axis=0)
+
+
+# In[27]:
+
+
+# Importing 2019 production data
+production_var_2019 = pd.read_csv('production_var_2019.csv')
+production_data = pd.concat([production_data, production_var_2019], axis=0)
+
+
+# In[28]:
+
+
+# Importing 2020 production data
+production_var_2020 = pd.read_csv('production_var_2020.csv')
+production_data = pd.concat([production_data, production_var_2020], axis=0)
+
+
+# In[29]:
+
+
+# Importing 2021 production data
+production_var_2021 = pd.read_csv('production_var_2021.csv')
+production_data = pd.concat([production_data, production_var_2021], axis=0)
+
+
+# In[30]:
+
+
+## Noticed for some unknown reason 2022 data is partially in hourly freq and partially in
+## quarter-hourly frequency. Dataset has been split in excel
+
+# Importing 2022 production data
+production_var_2022_hour = pd.read_csv('production_var_2022_hour.csv')
+production_data = pd.concat([production_data, production_var_2022_hour], axis=0)
+
+
+# In[ ]:
+
+
+## *** DONT RUN THIS BLOCK *** ##
+production_var_2022_quarter = pd.read_excel('production_var_2022_quarter.xlsx')
+
+production_var_2022_quarter['hourly_aggregate']=(production_var_2022_quarter.index//4)+1
+aggregated_data = production_var_2022_quarter.groupby('hourly_aggregate').mean()
+
+file = 'production_data_2022_quarter_corrected.xlsx'
+aggregated_data.to_excel(file, index=False)
+
+
+# In[31]:
+
+
+# Adding the quarter-hour corrected data to production data:
+production_var_2022_quarter_corrected = pd.read_excel('production_data_2022_quarter_corrected.xlsx')
+production_data = pd.concat([production_data, production_var_2022_quarter_corrected], axis=0)
+
+
+# In[ ]:
+
+
+## *** DONT RUN THIS BLOCK AGAIN *** ##
+
+# Importing 2023 production data
+
+# identified that 2023 is also in quarter-hour frequency, so needs transforming
+production_var_2023 = pd.read_csv('production_var_2023.csv')
+
+production_var_2023['hourly_aggregate']=(production_var_2023.index//4)+1
+aggregated_data = production_var_2022_quarter.groupby('hourly_aggregate').mean()
+
+file2 = 'production_var_2023_corrected.xlsx'
+aggregated_data.to_excel(file2, index=False)
+
+
+# In[32]:
+
+
+# Adding the quarter-hour corrected 2023 data to production data:
+production_var_2023_corrected = pd.read_excel('production_var_2023_corrected.xlsx')
+production_data = pd.concat([production_data, production_var_2023_corrected], axis=0)
+
+
+# In[33]:
+
+
+production_df = pd.DataFrame(production_data)
+
+
+# Now that the production and price datasets are correctly compiled, can begin cleaning them up:
+
+# In[34]:
+
+
+# Identified following variables which are irrelevant or feature NA's / 0's:
+    # Fossil Coal-derived gas - Actual Aggregated [MW]
+    # Fossil Oil shale - Actual Aggregated [MW]
+    # Fossil Peat - Actual Aggregated [MW]
+    # Marine - Actual Aggregated [MW]
+    # Wind Offshore  - Actual Aggregated [MW]
+
+removing_columns = ['MTU',
+                    'Area',
+                    'Fossil Coal-derived gas  - Actual Aggregated [MW]', 
+                    'Fossil Oil shale  - Actual Aggregated [MW]',
+                    'Fossil Peat  - Actual Aggregated [MW]',
+                    'Marine  - Actual Aggregated [MW]',
+                    'Wind Offshore  - Actual Aggregated [MW]',
+                    'Geothermal  - Actual Aggregated [MW]']   
+
+production_df.drop(removing_columns, axis=1, inplace=True)
+
+
+# In[35]:
+
+
+## Hydro Pumped Storage Acc Agg has NA's for only a minority of obersvations. These values will be interpolated
+## To do this, the datatypes of all the variables must first be changed to float:
+
+production_df['Biomass  - Actual Aggregated [MW]'] = production_df['Biomass  - Actual Aggregated [MW]'].astype(float)
+production_df['Fossil Brown coal/Lignite  - Actual Aggregated [MW]'] = production_df['Fossil Brown coal/Lignite  - Actual Aggregated [MW]'].astype(float)
+production_df['Fossil Gas  - Actual Aggregated [MW]'] = production_df['Fossil Gas  - Actual Aggregated [MW]'].astype(float)
+production_df['Fossil Hard coal  - Actual Aggregated [MW]'] = production_df['Fossil Hard coal  - Actual Aggregated [MW]'].astype(float)
+production_df['Fossil Oil  - Actual Aggregated [MW]'] = production_df['Fossil Oil  - Actual Aggregated [MW]'].astype(float)
+production_df['Hydro Pumped Storage  - Actual Aggregated [MW]'] = production_df['Hydro Pumped Storage  - Actual Aggregated [MW]'].astype(float)
+production_df['Hydro Pumped Storage  - Actual Consumption [MW]'] = production_df['Hydro Pumped Storage  - Actual Consumption [MW]'].astype(float)
+production_df['Hydro Run-of-river and poundage  - Actual Aggregated [MW]'] = production_df['Hydro Run-of-river and poundage  - Actual Aggregated [MW]'].astype(float)
+production_df['Hydro Water Reservoir  - Actual Aggregated [MW]'] = production_df['Hydro Water Reservoir  - Actual Aggregated [MW]'].astype(float)
+production_df['Nuclear  - Actual Aggregated [MW]'] = production_df['Nuclear  - Actual Aggregated [MW]'].astype(float)
+production_df['Other  - Actual Aggregated [MW]'] = production_df['Other  - Actual Aggregated [MW]'].astype(float)
+production_df['Other renewable  - Actual Aggregated [MW]'] = production_df['Other renewable  - Actual Aggregated [MW]'].astype(float)
+production_df['Solar  - Actual Aggregated [MW]'] = production_df['Solar  - Actual Aggregated [MW]'].astype(float)
+production_df['Waste  - Actual Aggregated [MW]'] = production_df['Waste  - Actual Aggregated [MW]'].astype(float)
+production_df['Wind Onshore  - Actual Aggregated [MW]'] = production_df['Wind Onshore  - Actual Aggregated [MW]'].astype(float)
+
+print(production_df.dtypes)
+
+
+# In[36]:
+
+
+production_df['Hydro Pumped Storage  - Actual Aggregated [MW]'].fillna(production_df['Hydro Pumped Storage  - Actual Aggregated [MW]'].mean(), inplace=True)
+
+
+# Merging the two dataframes to create the main/master dataset for analysis:
+
+# In[37]:
+
+
+price_df['datetime'] = pd.to_datetime(price_df['datetime'], utc = True)
+production_df['datetime'] = pd.to_datetime(production_df['datetime'], utc = True)
+
+main_df = pd.merge(price_df, production_df, on = 'datetime', how = 'inner')
+
+
+# In[38]:
+
+
+## Need to quickly tidy the Price aspect of the main dataframe:
+
+main_df.rename(columns = {'value': 'Average_Price'}, inplace=True)
+
+main_df.drop('name', axis=1, inplace=True)
+main_df.drop('id', axis=1, inplace=True)
+
+
+# Adding the Global Risk Index Data into the main dataframe:
+
+# In[39]:
+
+
+gri = pd.read_excel('condensed_GRI.xlsx')
+
+# Data is daily from 1/1/2015 up to 17/7/2023.
+# Need to transform it into 24 repititions for each hour of the day, to be consistent with main_df:
+
+gri_hourly = np.repeat(gri['GPRD'], 24)
+gri_hourly = pd.DataFrame(gri_hourly)
+
+
+# In[40]:
+
+
+# Now GRI has been repeated, it doesnt have a datetime column. Yet will be consistent with main_df
+# so creating an index which will be used to merge the data
+gri_hourly['index'] = range(1,len(gri_hourly)+1)
+main_df['index'] = range(1,len(main_df)+1)
+main_df.set_index('index', inplace=True)
+gri_hourly.set_index('index', inplace=True)
+
+
+# In[41]:
+
+
+# Merging:
+main_df = pd.merge(main_df, gri_hourly['GPRD'], on='index', how='inner')
+
+
+# In[42]:
+
+
+main_df.set_index('datetime', inplace=True)
+
+
+# In[43]:
+
+
+# checking for missing values:
+
+nan = main_df.isnull().sum()
+nan
+
+
+# In[44]:
+
+
+main_df['Biomass  - Actual Aggregated [MW]'].fillna(main_df['Biomass  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Fossil Brown coal/Lignite  - Actual Aggregated [MW]'].fillna(main_df['Fossil Brown coal/Lignite  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Fossil Gas  - Actual Aggregated [MW]'].fillna(main_df['Fossil Gas  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Fossil Hard coal  - Actual Aggregated [MW]'].fillna(main_df['Fossil Hard coal  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Fossil Oil  - Actual Aggregated [MW]'].fillna(main_df['Fossil Oil  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Hydro Pumped Storage  - Actual Consumption [MW]'].fillna(main_df['Hydro Pumped Storage  - Actual Consumption [MW]'].mean(), inplace=True)
+main_df['Hydro Run-of-river and poundage  - Actual Aggregated [MW]'].fillna(main_df['Hydro Run-of-river and poundage  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Hydro Water Reservoir  - Actual Aggregated [MW]'].fillna(main_df['Hydro Water Reservoir  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Nuclear  - Actual Aggregated [MW]'].fillna(main_df['Nuclear  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Other  - Actual Aggregated [MW]'].fillna(main_df['Other  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Other renewable  - Actual Aggregated [MW]'].fillna(main_df['Other renewable  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Solar  - Actual Aggregated [MW]'].fillna(main_df['Solar  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Waste  - Actual Aggregated [MW]'].fillna(main_df['Waste  - Actual Aggregated [MW]'].mean(), inplace=True)
+main_df['Wind Onshore  - Actual Aggregated [MW]'].fillna(main_df['Wind Onshore  - Actual Aggregated [MW]'].mean(), inplace=True)
+
+
+# In[62]:
+
+
+# saving the main dataframe:
+
+file3 = 'main_df.csv'
+main_df.to_csv(file3, index=True)
+
+
+# Exploratory Data Analysis:
+
+# In[7]:
+
+
+import pandas as pd
+main_df = pd.read_csv('main_df.csv')
+main_df.set_index('datetime', inplace=True)
+
+
+# In[55]:
+
+
+main_df.shape
+
+
+# In[13]:
+
+
+# Key Descriptive Statistics:
+desc_stats = main_df.describe()
+desc_stats
+
+
+# In[14]:
+
+
+descriptive_stat_export = 'descriptive_stats.xlsx'
+desc_stats.to_excel(descriptive_stat_export)
+
+
+# In[59]:
+
+
+## time series plots:
+import matplotlib.pyplot as plt
+
+for column in main_df.columns:
+    plt.figure(figsize = (8,4))
+    plt.plot(main_df.index, main_df[column])
+    plt.xlabel('Datetime')
+    plt.ylabel(column)
+    plt.title(f'Time Series Plot of {column}')
+    plt.show
+
+
+# In[30]:
+
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+corr_matrix = main_df.corr()
+
+plt.figure(figsize=(8,6))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f', linewidths=0.5)
+plt.title('Correlation Matrix Heatmap:')
+plt.show
+
+## add in heatmap here for visualisation
+
+
+# In[44]:
+
+
+main_df.columns
+
+
+# In[51]:
+
+
+# Redo-ing Heat Map with Data with abbreviated names:
+
+copy_df = main_df
+
+new_names = {
+    'Average_Price': 'Average Price',
+    'Biomass  - Actual Aggregated [MW]': 'Biomass',
+    'Fossil Brown coal/Lignite  - Actual Aggregated [MW]': 'Fossil Brown Coal/Lignite',
+    'Fossil Gas  - Actual Aggregated [MW]': 'Fossil Gas',
+    'Fossil Hard coal  - Actual Aggregated [MW]': 'Fossil Hard Coal',
+    'Fossil Oil  - Actual Aggregated [MW]': 'Fossil Oil',
+    'Hydro Pumped Storage  - Actual Aggregated [MW]': 'Hydro Pumped Storage (Agg)',
+    'Hydro Pumped Storage  - Actual Consumption [MW]': 'Hydro Pumped Storage (Con)',
+    'Hydro Run-of-river and poundage  - Actual Aggregated [MW]': 'Hydro Run-of-river and poundage',
+    'Hydro Water Reservoir  - Actual Aggregated [MW]': 'Hydro Water Reservoir',
+    'Nuclear  - Actual Aggregated [MW]': 'Nuclear',
+    'Other  - Actual Aggregated [MW]': 'Other',
+    'Other renewable  - Actual Aggregated [MW]': 'Other Renewable',
+    'Solar  - Actual Aggregated [MW]': 'Solar',
+    'Waste  - Actual Aggregated [MW]': 'Waste',
+    'Wind Onshore  - Actual Aggregated [MW]': 'Wind Onshore',
+}
+
+copy_df.rename(columns = new_names, inplace=True)
+
+
+# In[53]:
+
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+corr_matrix2 = copy_df.corr()
+
+plt.figure(figsize=(8,6))
+sns.heatmap(corr_matrix2, annot=True, cmap='coolwarm', fmt='.2f', linewidths=0.5)
+plt.title('Correlation Matrix Heatmap:')
+plt.show
+
+
+# In[31]:
+
+
+# Scatter Plots of Important Correlations:
+
+plt.scatter(main_df['GPRD'], main_df['Average_Price'])
+plt.xlabel('Global Risk Index')
+plt.ylabel('Average Price')
+plt.title('Scatter Plot of GPRD and Average Price')
+
+
+# In[34]:
+
+
+plt.scatter(main_df['Fossil Oil  - Actual Aggregated [MW]'], main_df['Average_Price'])
+plt.xlabel('Fossil Oil  - Actual Aggregated [MW]')
+plt.ylabel('Average Price')
+plt.title('Scatter Plot of Fossil Oil and Average Price')
+
+
+# In[35]:
+
+
+import matplotlib.pyplot as plt
+
+for column in main_df.columns:
+    plt.figure(figsize=(6,4))
+    main_df[column].plot.density()
+    plt.xlabel('Value')
+    plt.ylabel('Density')
+    plt.title(f'Density Plot of {column}')
+    plt.show()
+
+
+# In[39]:
+
+
+# Principal Component Analysis:
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+norm_main_df = scaler.fit_transform(main_df)
+num_comp = 10
+pca = PCA(n_components = num_comp)
+pca_result = pca.fit_transform(norm_main_df)
+
+explained_var = pca.explained_variance_ratio_
+print('Explained variance:', explained_var)
+
+plt.bar(range(1, num_comp +1), explained_var)
+plt.xlabel('Principal Component')
+plt.ylabel('Explained Variance')
+plt.title('Explained Variance')
+plt.show
+
+
+# Time Series EDA:
+
+# In[40]:
+
+
+import statsmodels.api as sm
+
+
+# In[42]:
+
+
+## ACF's for each variable
+from statsmodels.graphics.tsaplots import plot_acf
+for column in main_df.columns:
+    plt.figure(figsize=(6,4))
+    plot_acf(main_df[column], lags=len(main_df[column])-1)
+    plt.xlabel('Lag')
+    plt.ylabel('Autocorrelation')
+    plt.title(f'ACF Plot of {column}')
+    plt.show()
+
+
+# In[46]:
+
+
+## Stationarity Testing:
+# Using augmented dickey fully test:
+
+from statsmodels.tsa.stattools import adfuller
+
+for column in main_df.columns:
+    dfuller_test = adfuller(main_df[column])
+    test_statistic = dfuller_test[0]
+    critical_values = dfuller_test[4]
+    if test_statistic < critical_values['1%']:
+        print(f"{column} is stationary at 1% significance level.")
+    elif test_statistic < critical_values['5%']:
+        print(f"{column} is stationary at 5% significance level.")
+    elif test_statistic < critical_values['10%']:
+        print(f"{column} is stationary at 10% significance level.")
+    else:
+        print(f"{column} is not stationary.")
+
+
+# Machine & Deep Learning Algorithms:
+
+# In[22]:
+
+
+import os
+os.chdir("/Users/tomspeed/Library/CloudStorage/OneDrive-UniversityofEssex/Dissertation/data")
+os.getcwd()
+import pandas as pd
+main_df = pd.read_csv('main_df.csv')
+main_df = pd.DataFrame(main_df)
+main_df.set_index('datetime', inplace=True)
+
+
+# In[16]:
+
+
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
+
+
+# In[18]:
+
+
+# fixing random seed for reproducibility
+tf.random.set_seed(7)
+
+
+# In[17]:
+
+
+# Scaling the data
+from sklearn.preprocessing import MinMaxScaler
+
+x = main_df.drop(columns=['Average_Price'])
+y = main_df['Average_Price']
+
+scaler = MinMaxScaler()
+x_scaled = scaler.fit_transform(x)
+y_scaled = scaler.fit_transform(y.values.reshape(-1,1))
+
+print(y_scaled.shape)
+print(x_scaled.shape)
+
+
+# In[19]:
+
+
+# data needed to be sequenced to be compatible with LSTM
+import numpy as np
+def create_sequences(data, look_back):
+    sequences = []
+    for i in range(len(data) - look_back + 1):
+        sequences.append(data[i:i+look_back])
+    return np.array(sequences)
+
+look_back = 72  # no. of time steps in each sequence
+x_data = create_sequences(x_scaled, look_back)
+y_data = create_sequences(y_scaled, look_back)
+
+
+# In[18]:
+
+
+print(x_data.shape)
+print(y_data.shape)
+
+
+# In[28]:
+
+
+# Splitting training, valdidation, test set in 70:15:15 ratio
+train_size = int(0.7 * len(x_data))
+val_size = int(0.15 * len(x_data))
+
+x_train = x_data[:train_size]
+x_val = x_data[train_size:train_size+val_size]
+x_test = x_data[train_size+val_size:]
+
+# Corresponding response variable (price) for each set
+y_train = y_scaled[look_back:train_size+look_back]
+y_val = y_scaled[train_size+look_back:train_size+val_size+look_back]
+y_test = y_scaled[train_size+val_size+look_back:]
+
+
+# In[7]:
+
+
+## Reduced form data (excluding GRI for comparison)
+
+x_reduced = main_df.drop(columns=['Average_Price', 'GPRD'])
+y = main_df['Average_Price']
+
+scaler = MinMaxScaler()
+x_reduced_scaled = scaler.fit_transform(x_reduced)
+y_scaled = scaler.fit_transform(y.values.reshape(-1,1))
+
+x_data_reduced = create_sequences(x_reduced_scaled, look_back)
+
+# Splitting training, valdidation, test set in 70:15:15 ratio
+train_size = int(0.7 * len(x_data))
+val_size = int(0.15 * len(x_data))
+
+x_reduced_train = x_data_reduced[:train_size]
+x_reduced_val = x_data_reduced[train_size:train_size+val_size]
+x_reduced_test = x_data_reduced[train_size+val_size:]
+
+# Corresponding response variable (price) for each set
+y_train = y_scaled[look_back:train_size+look_back]
+y_val = y_scaled[train_size+look_back:train_size+val_size+look_back]
+y_test = y_scaled[train_size+val_size+look_back:]
+
+
+
+# LSTM Model:
+
+# In[43]:
+
+
+from tensorflow import keras
+from tensorflow.keras import layers
+
+num_predictors = 16
+
+
+# Fitting LSTM:
+lstm = keras.Sequential([
+    layers.LSTM(units=128, activation='relu', input_shape=(look_back, num_predictors), return_sequences=True),
+    layers.Dropout(0.2),
+    layers.LSTM(units=64, activation='sigmoid', return_sequences=False),
+    layers.Dropout(0.2),
+    layers.Dense(units=1)  # Output layer for predicting price
+])
+
+lstm.compile(optimizer='adam', loss='mean_squared_error')
+
+history = lstm.fit(x_train, y_train, epochs=15, batch_size=64, validation_data=(x_val, y_val))
+
+# Predicting:
+predictions = lstm.predict(x_test)
+
+
+# Evaluation Metrics:
+
+num_samples, num_features = y_test.shape
+
+# Number of sequences based on look_back
+num_sequences = num_samples - look_back + 1
+
+from sklearn.metrics import mean_squared_error
+
+mse_list = []
+for i in range(num_sequences):
+    mse_sequence = mean_squared_error(y_test[i], predictions[i])
+    mse_list.append(mse_sequence)
+
+mse_array = np.array(mse_list)
+average_mse = np.mean(mse_array)
+
+print(f"Average Mean Squared Error: {average_mse:.4f}")
+
+
+# Comparative Models for Robustness Checks:
+
+# In[20]:
+
+
+## Linear Regression:
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+X_train_scaled, X_test_scaled, Y_train_scaled, Y_test_scaled = train_test_split(x_scaled, y_scaled, test_size=0.2, random_state=42)
+
+linear_reg = LinearRegression()
+linear_regression = linear_reg.fit(X_train_scaled, Y_train_scaled)
+lin_reg_predictions = linear_reg.predict(X_test_scaled)
+
+mse = mean_squared_error(Y_test_scaled, lin_reg_predictions)
+
+print(f"Mean Squared Error: {mse:.5f}")
+
+
+# In[31]:
+
+
+from sklearn.model_selection import cross_val_score
+
+lin_cv5 = LinearRegression()
+cross_val_scores = cross_val_score(lin_cv5, X_train_scaled, Y_train_scaled, cv=5, scoring='neg_mean_squared_error')
+cross_val_scores = -cross_val_scores
+print(f"Cross-Validation MSE Scores: {np.mean(cross_val_scores):.5f}")
+# this has significantly decreased the MSE score compared to model without CV
+
+
+# In[32]:
+
+
+from sklearn.model_selection import cross_val_score
+
+lin_cv10 = LinearRegression()
+cross_val_scores = cross_val_score(lin_cv10, X_train_scaled, Y_train_scaled, cv=10, scoring='neg_mean_squared_error')
+cross_val_scores = -cross_val_scores
+print(f"Cross-Validation MSE Scores: {np.mean(cross_val_scores):.5f}")
+# By doubling the number of folds in CV from 5 to 10 the MSE doesnt decrease
+# this indicates that the model has converged on predictions
+# and that any further accuracy cannot be obtained from a basic linear model
+
+
+# In[21]:
+
+
+# ARIMA Model:
+import statsmodels.api as sm
+
+arima = sm.tsa.ARIMA(Y_train_scaled, order=(24, 0, 24))
+arima_result = arima.fit()
+
+arima_predict = arima_result.predict(start=len(Y_train_scaled), end=len(y)-1)
+mse_arima = mean_squared_error(Y_test_scaled, arima_predict)
+print(f" ARIMA MSE Scores: {mse_arima:.5f}")
+
+
+# In[38]:
+
+
+# SARIMAX:
+import statsmodels.api as sm
+
+sarimax_model = sm.tsa.SARIMAX(Y_train_scaled, exog=X_train_scaled, order = (24, 0, 0), seasonal_order = (0,0,0,24))
+sarimax_result = sarimax_model.fit()
+
+start = len(Y_train_scaled)
+end = len(main_df)-1
+sarimax_predict = sarimax_result.get_prediction(start=start, end=end, exog=X_test_scaled)
+
+mse_sarimax = mean_squared_error(Y_test_scaled, sarimax_predict.predicted_mean)
+
+print(f"Mean Squared Error: {mse_sarimax:.5f}")
+
+
+# In[37]:
+
+
+# Reduced form LSTM model - excluding GRI to compare with saturated model
+from tensorflow import keras
+from tensorflow.keras import layers
+
+num_predictors = 15
+
+lstm_reduced = keras.Sequential([
+    layers.LSTM(units=128, activation='relu', input_shape=(look_back, num_predictors), return_sequences=True),
+    layers.Dropout(0.2),
+    layers.LSTM(units=64, activation='sigmoid', return_sequences=False),
+    layers.Dropout(0.2),
+    layers.Dense(units=1)  # Output layer for predicting price
+])
+
+lstm_reduced.compile(optimizer='adam', loss='mean_squared_error')
+
+history_reduced = lstm_reduced.fit(x_reduced_train, y_train, epochs=15, batch_size=64, validation_data=(x_reduced_val, y_val))
+
+predictions_reduced = lstm_reduced.predict(x_reduced_test)
+
+
+## Evaluation Metrics: ##
+num_samples, num_features = y_test.shape
+
+# Calculate the number of sequences based on look_back
+num_sequences = num_samples - look_back + 1
+
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
+
+mse_list_reduced = []
+for i in range(num_sequences):
+    mse_sequence_reduced = mean_squared_error(y_test[i], predictions_reduced[i])
+    mse_list_reduced.append(mse_sequence_reduced)
+
+# Convert the list of MSEs to a NumPy array
+mse_array_reduced = np.array(mse_list_reduced)
+
+# Calculate the average MSE
+reduced_average_mse = np.mean(mse_array_reduced)
+
+print(f"Average Mean Squared Error: {reduced_average_mse:.4f}")
+
+
+# In[14]:
+
+
+## Reduced form Linear Regression w/ Cross Validation:
+
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import train_test_split
+
+X_reduced_train_scaled, X_reduced_test_scaled, Y_train_scaled, Y_test_scaled = train_test_split(x_reduced_scaled, y_scaled, test_size=0.2, random_state=42)
+
+lin_cv10_reduced = LinearRegression()
+cross_val_scores = cross_val_score(lin_cv10_reduced, X_reduced_train_scaled, Y_train_scaled, cv=10, scoring='neg_mean_squared_error')
+cross_val_scores = -cross_val_scores
+print(f"Mean Cross-Validation MSE Scores: {np.mean(cross_val_scores):.5f}")
+
+
+# In[19]:
+
+
+# Reduced Form SARIMAX:
+
+sarimax_model_reduced = sm.tsa.SARIMAX(Y_train_scaled, exog=X_reduced_train_scaled, order = (24, 0, 0), seasonal_order = (0,0,0,24))
+sarimax_result_reduced = sarimax_model_reduced.fit()
+
+start = len(Y_train_scaled)
+end = len(main_df)-1
+sarimax_predict_reduced = sarimax_result_reduced.get_prediction(start=start, end=end, exog=X_reduced_test_scaled)
+
+mse_sarimax_reduced = mean_squared_error(Y_test_scaled, sarimax_predict_reduced.predicted_mean)
+
+print(f"Mean Squared Error: {mse_sarimax_reduced:.5f}")
+
+
+# In[20]:
+
+
+print(f"Mean Squared Error: {mse_sarimax_reduced:.5f}")
+
